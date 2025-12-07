@@ -10,7 +10,7 @@ export class AppService {
   }
 
   getEmoji(index?: number): string {
-    return index === undefined || index >= this.emojis.length
+    return index === undefined || index < 0 || index >= this.emojis.length
       ? this.emojis[Math.floor(Math.random() * this.emojis.length)]
       : this.emojis[index];
   }
