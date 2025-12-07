@@ -19,7 +19,28 @@ A robust NestJS microservice that serves random or specific emojis via a RESTful
 $ pnpm install
 ```
 
+## ⚙️ Configuration
+
+The application requires environment variables to run correctly.
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Open `.env` and configure your settings:
+
+   ```bash
+   PORT=3000
+   HOST=0.0.0.0
+   LOG_LEVEL=info
+   API_KEY=your_secret_api_key  # Can be any random string, required for auth
+   ```
+
+   > **Important:** The `API_KEY` defined here must be passed in the `x-api-key` header for all protected API requests.
+
 ## 🏃 Running the app
+
+Ensure you have set up your `.env` file before running the application.
 
 ```bash
 # development
@@ -33,6 +54,8 @@ $ pnpm run start:prod
 ```
 
 ## 🧪 Tests
+
+> **Note:** Tests require the `API_KEY` environment variable to be set. This is automatically handled if you have configured your `.env` file correctly, or you can pass it inline.
 
 ```bash
 # unit tests
@@ -53,6 +76,8 @@ Returns a simple greeting.
 
 - **URL**: `/`
 - **Method**: `GET`
+- **Headers**:
+  - `x-api-key` (required): Must match the `API_KEY` environment variable.
 - **Response**: `Hello World!`
 
 ### Get Emoji
@@ -61,6 +86,8 @@ Returns a random emoji or a specific emoji if an index is provided.
 
 - **URL**: `/emoji`
 - **Method**: `GET`
+- **Headers**:
+  - `x-api-key` (required): Must match the `API_KEY` environment variable.
 - **Query Parameters**:
   - `index` (optional): The numeric index of the emoji to retrieve.
 - **Response**:
@@ -70,12 +97,21 @@ Returns a random emoji or a specific emoji if an index is provided.
   }
   ```
 
-## 🚀 Deployment
+## 🚀 Deployment & CI/CD
 
-This project is configured for automated deployment to [Railway](https://railway.app/) via GitHub Actions.
+This project uses **GitHub Actions** for Continuous Integration and Continuous Deployment.
 
-- The `Deploy` workflow runs on success of the `Tests` workflow on the `main` branch.
-- It builds the application and deploys it using the Railway CLI.
+### GitHub Actions Secrets
+
+To ensure the CI/CD pipeline runs successfully, you must add the following **Repository Secret** in your GitHub repository settings:
+
+- **Name**: `API_KEY`
+- **Value**: Your chosen secret key (can be a generated UUID or any secure string).
+
+### Deployment Flow
+
+- **Tests**: Runs on every push to `main` and all Pull Requests. Requires `API_KEY` secret.
+- **Deploy**: Automatically deploys to [Railway](https://railway.app/) only when the `Tests` workflow passes on the `main` branch.
 
 ## 📄 License
 
