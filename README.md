@@ -99,19 +99,43 @@ Returns a random emoji or a specific emoji if an index is provided.
 
 ## 🚀 Deployment & CI/CD
 
-This project uses **GitHub Actions** for Continuous Integration and Continuous Deployment.
+This project is configured for automated deployment to [Railway](https://railway.app/) via GitHub Actions.
 
-### GitHub Actions Secrets
+### 1. Railway Setup
 
-To ensure the CI/CD pipeline runs successfully, you must add the following **Repository Secret** in your GitHub repository settings:
+Before deploying, you need to set up your project on Railway:
 
-- **Name**: `API_KEY`
-- **Value**: Your chosen secret key (can be a generated UUID or any secure string).
+1.  **Create a Project**: Go to [Railway](https://railway.app/) and create a new project.
+2.  **Create a Service**: Inside the project, create an empty service. :warning: **Important:** Name the service `emoji-generator`.
+    - _If you want to use a different name, update the `--service` flag in `.github/workflows/deploy.yml`._
+3.  **Set Environment Variables**: In your Railway Service dashboard, go to the **Variables** tab and add the following:
+    - `API_KEY`: (Required) The same key you plan to use for authentication.
+    - `PORT`: `3000` (Optional, Railway usually handles this, but good to set).
+    - `LOG_LEVEL`: `info` (Optional).
+4.  **Generate a Token**:
+    - Go to **Project Settings** (or Service Settings for service-scoped token).
+    - Under "Tokens", click **Generate a New Token**.
+    - Copy this value.
 
-### Deployment Flow
+### 2. GitHub Secrets Setup
 
-- **Tests**: Runs on every push to `main` and all Pull Requests. Requires `API_KEY` secret.
-- **Deploy**: Automatically deploys to [Railway](https://railway.app/) only when the `Tests` workflow passes on the `main` branch.
+To enable the CI/CD pipeline, add the following secrets to your GitHub repository:
+
+1.  Go to **Settings** > **Secrets and variables** > **Actions**.
+2.  Click **New repository secret**.
+3.  Add the following secrets:
+
+    | Name            | Value                | Description                               |
+    | :-------------- | :------------------- | :---------------------------------------- |
+    | `API_KEY`       | `your_secret_key`    | Required for running tests in CI.         |
+    | `RAILWAY_TOKEN` | `your_railway_token` | The token you copied from Railway step 4. |
+
+### 3. Deployment Flow
+
+Once the secrets are set up:
+
+- **Tests**: Runs on every push to `main` and all Pull Requests.
+- **Deploy**: Automatically deploys to Railway **only when** the `Tests` workflow passes on the `main` branch.
 
 ## 📄 License
 
