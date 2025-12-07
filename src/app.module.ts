@@ -16,7 +16,7 @@ import { RequestLoggerMiddleware } from './common/logger/logger.middleware';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath: ['.env', '.env.development'],
       validate,
     }),
   ],
