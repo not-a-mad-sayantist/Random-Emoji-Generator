@@ -106,14 +106,18 @@ This project is configured for automated deployment to [Railway](https://railway
 Before deploying, you need to set up your project on Railway:
 
 1.  **Create a Project**: Go to [Railway](https://railway.app/) and create a new project.
-2.  **Create a Service**: Inside the project, create an empty service. :warning: **Important:** Name the service `emoji-generator`.
-    - _If you want to use a different name, update the `--service` flag in `.github/workflows/deploy.yml`._
-3.  **Set Environment Variables**: In your Railway Service dashboard, go to the **Variables** tab and add the following:
+2.  **Connect Repository**: Select "Deploy from GitHub repo" and choose this repository. This will automatically create a service for the project.
+3.  **Get Service ID**:
+    - Click on your service in the canvas.
+    - Go to **Variables**.
+    - Look for `RAILWAY_SERVICE_ID` under System Variables (you might need to toggle "Show System Variables").
+    - Copy the UUID.
+4.  **Set Environment Variables**: In your Railway Service dashboard, go to the **Variables** tab and add the following:
     - `API_KEY`: (Required) The same key you plan to use for authentication.
     - `PORT`: `3000` (Optional, Railway usually handles this, but good to set).
     - `LOG_LEVEL`: `info` (Optional).
-4.  **Generate a Token**:
-    - Go to **Project Settings** (or Service Settings for service-scoped token).
+5.  **Generate a Token**:
+    - Go to **Project Settings**.
     - Under "Tokens", click **Generate a New Token**.
     - Copy this value.
 
@@ -128,7 +132,8 @@ To enable the CI/CD pipeline, add the following secrets to your GitHub repositor
     | Name            | Value                | Description                               |
     | :-------------- | :------------------- | :---------------------------------------- |
     | `API_KEY`       | `your_secret_key`    | Required for running tests in CI.         |
-    | `RAILWAY_TOKEN` | `your_railway_token` | The token you copied from Railway step 4. |
+    | `SVC_ID`        | `your_service_uuid`  | The Service ID UUID from Step 3.          |
+    | `RAILWAY_TOKEN` | `your_railway_token` | The token you copied from Railway step 5. |
 
 ### 3. Deployment Flow
 
